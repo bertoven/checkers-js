@@ -1,13 +1,23 @@
 *{
     box-sizing: border-box;
+    text-align: center;
+}
+
+#container{
+    margin-top: 50px;
+    display: inline-block;
 }
 
 #board{
+    float: left;
     width: 700px;
     height: 700px;
     border: 2px solid black;
-    margin: 100px auto 0 auto;
+}
 
+#score{
+    float: left;
+    margin-left: 50px;
 }
 
 .row{

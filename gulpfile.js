@@ -5,6 +5,7 @@
     var gulp = require('gulp');
     var connect = require('gulp-connect');
     var open = require('gulp-open');
+    var deploy = require('gulp-gh-pages');
 
     gulp.task('open', function ()
     {
@@ -18,6 +19,10 @@
             port: 9000,
             livereload: true
         });
+    });
+
+    gulp.task('deploy', function () {
+        return gulp.src('./app/**/*').pipe(deploy());
     });
 
     gulp.task('html', function ()

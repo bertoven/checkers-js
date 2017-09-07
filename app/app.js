@@ -3,22 +3,35 @@ $(function ()
     'use strict';
 
     var board = $('#board');
+    var whiteScore = 0;
+    var blackScore = 0;
+    var whiteScoreElement = $('#white-score');
+    var blackScoreElement = $('#black-score')
     var pawnSelected = false;
     var whoseTurn = 'white';
     var pawn;
+
+    function removeEnemy(enemy){
+
+        ++whiteScore;
+        whiteScoreElement.html('White: ' + whiteScore);
+
+        ++blackScore;
+        blackScoreElement.html('Black: ' + blackScore);
+    }
 
     function findEnemy(target)
     {
         if (pawn.hasClass('white-pawn'))
         {
-            if (board.find('.row').eq(pawn.parent().parent().index() - 1)
-                            .find('.square').eq((pawn.parent().index() + target.index()) / 2)
-                            .find('.black-pawn').length !== 0)
+            if (board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() - 1).hasClass('.black-pawn') ||
+                    board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() + 1).hasClass('.black-pawn') ||
+                    board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() - 1).hasClass('.black-pawn') ||
+                    board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() + 1).hasClass('.black-pawn'))
             {
-                board.find('.row').eq(pawn.parent().parent().index() - 1)
+                var enemy = board.find('.row').eq(pawn.parent().parent().index() - 1)
                         .find('.square').eq(Math.ceil((pawn.parent().index() + target.index()) / 2))
-                        .find('.black-pawn').remove();
-                return true;
+                        .find('.black-pawn');
             }
         }
         else if (pawn.hasClass('black-pawn'))
@@ -29,10 +42,11 @@ $(function ()
             {
                 board.find('.row').eq(pawn.parent().parent().index() + 1)
                         .find('.square').eq(Math.ceil((pawn.parent().index() + target.index()) / 2))
-                        .find('.white-pawn').remove();
-                return true;
+                        .find('.white-pawn');
             }
         }
+
+        return enemy;
     }
 
     $('.pawn').click(function()
@@ -58,11 +72,16 @@ $(function ()
         {
             if (pawn.hasClass('white-pawn'))
             {
-                if(board.find($(this).parent()).index() >= board.find(pawn.parent().parent()).index() ||
+                if (board.find($(this).parent()).index() >= board.find(pawn.parent().parent()).index() ||
                 board.find($(this).parent()).index() < board.find(pawn.parent().parent()).index() - 2 ||
                 Math.abs(board.find($(this)).index() - board.find(pawn.parent()).index()) !==
                 Math.abs(board.find($(this).parent()).index() - board.find(pawn.parent().parent()).index()))
                 {
+                    return;
+                }
+                if(Math.abs($(this).index() - pawn.parent().index()) === 2 && findEnemy($(this)))
+                {
+                    removeEnemy()
                     return;
                 }
                 if(Math.abs($(this).index() - pawn.parent().index()) === 2 && !findEnemy($(this)))
@@ -72,7 +91,7 @@ $(function ()
             }
             else if (pawn.hasClass('black-pawn'))
             {
-                if(board.find($(this).parent()).index() <= board.find(pawn.parent().parent()).index() ||
+                if (board.find($(this).parent()).index() <= board.find(pawn.parent().parent()).index() ||
                         board.find($(this).parent()).index() > board.find(pawn.parent().parent()).index() + 2 ||
                         Math.abs(board.find($(this)).index() - board.find(pawn.parent()).index()) !==
                         Math.abs(board.find($(this).parent()).index() - board.find(pawn.parent().parent()).index()))
