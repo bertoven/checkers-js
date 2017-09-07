@@ -1,0 +1,13 @@
+{
+  "name": "jq-w1-jquery",
+  "version": "1.0.0",
+  "devDependencies": {
+    "gulp": "3.9.1",
+    "gulp-connect": "5.0.0",
+    "gulp-open": "2.0.0",
+    "jshint": "2.9.4"
+  },
+  "scripts": {
+    "jshint": "node_modules/.bin/jshint app/*.js || true"
+  }
+}

@@ -1,0 +1,6 @@
+{
+    "name": "jq-w1-jquery",
+    "dependencies": {
+        "jquery": "3.2.1"
+    }
+}
