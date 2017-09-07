@@ -3,18 +3,99 @@
 <head>
     <meta charset="utf-8">
     <title>jq-w1</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<form>
-    <input type="checkbox" name="color" value="red">red
-    <input type="checkbox" name="color" value="green">green
-    <input type="checkbox" name="color" value="blue">blue
-    <input type="checkbox" name="color" value="black">black
-    <input type="checkbox" name="color" value="orange">orange
-</form>
+<div id="board">
+    <div class="row">
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+    </div>
 
-<p id="message"></p>
+    <div class="row">
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+    </div>
+
+    <div class="row">
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="black-pawn pawn"><div></div></div></div>
+    </div>
+
+    <div class="row">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+    </div>
+
+    <div class="row">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+    </div>
+
+    <div class="row">
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+    </div>
+
+    <div class="row">
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+    </div>
+
+    <div class="row">
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+        <div class="square"><div class="white-pawn pawn"><div></div></div></div>
+        <div class="square"></div>
+    </div>
+</div>
 
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="app.js"></script>
