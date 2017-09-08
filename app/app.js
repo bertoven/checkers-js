@@ -11,11 +11,35 @@ $(function ()
     var whoseTurn = 'white';
     var pawn;
     var haveToAttack = false;
+    var queenFont = '<i class="fa fa-life-ring" aria-hidden="true"></i>';
 
     function possibilityOfAttack(pawn)
     {
         if (pawn.hasClass('white-pawn'))
         {
+            if (pawn.hasClass('queen'))
+            {
+                var x = pawn.parent().parent().index();
+                var y = pawn.parent().index();
+                var min = Math.min(x, y);
+                --x; --y;
+
+                for (var i = 0; i < min; ++i)
+                {
+                    console.log(board.children().eq(x).children().eq(y));
+                    if (board.children().eq(x).children().eq(y).find('.white-pawn').length)
+                    {
+                        break;
+                    }
+                    if (board.children().eq(x).children().eq(y).find('.black-pawn').length && x - 1 >= 0 && y - 1 >= 0 && !board.children().eq(x - 1).children().eq(y - 1).children().length)
+                    {
+                        return true;
+                    }
+                    --x; --y;
+                }
+
+                return false;
+            }
             if ((board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() - 1).has('.black-pawn').length &&
                     !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() - 2).has('.white-pawn').length &&
                     !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() - 2).has('.black-pawn').length &&
@@ -126,6 +150,24 @@ $(function ()
         return false;
     }
 
+    function queenMaker(pawn)
+    {
+        if (pawn.hasClass('white-pawn')) {
+            if (pawn.parent().parent().index() === 0 )
+            {
+                pawn.find('div').append(queenFont);
+                pawn.addClass('queen');
+            }
+        }
+        else if (pawn.hasClass('black-pawn')) {
+            if (pawn.parent().parent().index() === board.children().length - 1)
+            {
+                pawn.find('div').append(queenFont);
+                pawn.addClass('queen');
+            }
+        }
+    }
+
     $('.pawn').click(function()
     {
         if (whoseTurn === 'white' && $(this).hasClass('white-pawn'))
@@ -165,6 +207,7 @@ $(function ()
                         return;
                     }
                     pawn.appendTo($(this));
+                    queenMaker(pawn);
                     pawnSelected = false;
                     if (pawn.hasClass('white-pawn'))
                     {
@@ -204,6 +247,7 @@ $(function ()
                         return;
                     }
                     pawn.appendTo($(this));
+                    queenMaker(pawn);
                     pawnSelected = false;
                     if (pawn.hasClass('white-pawn'))
                     {
@@ -229,11 +273,13 @@ $(function ()
             }
 
             pawn.appendTo($(this));
+            queenMaker(pawn);
             if (possibilityOfAttack(pawn))
             {
                 pawn = $(this).find('.pawn');
                 return;
             }
+
             pawnSelected = false;
             if (pawn.hasClass('white-pawn'))
             {
