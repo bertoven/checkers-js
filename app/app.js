@@ -128,16 +128,8 @@ $(function ()
 
     $('.pawn').click(function()
     {
-        haveToAttack = false;
-
-        if (whoseTurn === 'white' && $(this).hasClass('white-pawn')) {
-            $('.white-pawn').each(function(){
-                if (possibilityOfAttack($(this)))
-                {
-                    haveToAttack = true;
-                }
-            });
-
+        if (whoseTurn === 'white' && $(this).hasClass('white-pawn'))
+        {
             pawn = $(this);
             pawnSelected = true;
             $('.pawn').removeClass('selected');
@@ -145,13 +137,6 @@ $(function ()
         }
         else if (whoseTurn === 'black' && $(this).hasClass('black-pawn'))
         {
-            $('.black-pawn').each(function(){
-                if (possibilityOfAttack($(this)))
-                {
-                    haveToAttack = true;
-                }
-            });
-
             pawn = $(this);
             pawnSelected = true;
             $('.pawn').removeClass('selected');
@@ -163,8 +148,16 @@ $(function ()
     {
         if (pawnSelected && $(this).find('.pawn').length === 0 && $(this).css('background-color') !== 'rgba(0, 0, 0, 0)')
         {
+            haveToAttack = false;
             if (pawn.hasClass('white-pawn'))
             {
+                $('.white-pawn').each(function(){
+                    if (possibilityOfAttack($(this)))
+                    {
+                        haveToAttack = true;
+                    }
+                });
+
                 if (!haveToAttack){
                     if ($(this).parent().index() !== pawn.parent().parent().index() - 1 ||
                             Math.abs($(this).index() - pawn.parent().index()) > 1)
@@ -197,6 +190,13 @@ $(function ()
             }
             else if (pawn.hasClass('black-pawn'))
             {
+                $('.black-pawn').each(function(){
+                    if (possibilityOfAttack($(this)))
+                    {
+                        haveToAttack = true;
+                    }
+                });
+
                 if (!haveToAttack){
                     if ($(this).parent().index() !== pawn.parent().parent().index() + 1 ||
                             Math.abs($(this).index() - pawn.parent().index()) > 1)
