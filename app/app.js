@@ -6,7 +6,7 @@ $(function ()
     var whiteScore = 0;
     var blackScore = 0;
     var whiteScoreElement = $('#white-score');
-    var blackScoreElement = $('#black-score')
+    var blackScoreElement = $('#black-score');
     var pawnSelected = false;
     var whoseTurn = 'white';
     var pawn;
@@ -20,33 +20,60 @@ $(function ()
         blackScoreElement.html('Black: ' + blackScore);
     }
 
-    function findEnemy(target)
+    function possibilityOfAttack(pawn)
     {
         if (pawn.hasClass('white-pawn'))
         {
-            if (board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() - 1).hasClass('.black-pawn') ||
-                    board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() + 1).hasClass('.black-pawn') ||
-                    board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() - 1).hasClass('.black-pawn') ||
-                    board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() + 1).hasClass('.black-pawn'))
+            if ((board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() - 1).has('.black-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() - 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() - 2).has('.black-pawn').length &&
+                    pawn.parent().index() - 2 > 0 && pawn.parent().parent().index()) ||
+
+                    (board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() + 1).has('.black-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() + 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() + 2).has('.black-pawn').length &&
+                    pawn.parent().index() + 2 < pawn.parent().parent().children().length) ||
+
+                    (board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() - 1).has('.black-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() - 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() - 2).has('.black-pawn').length &&
+                    pawn.parent().index() - 2 > 0) ||
+
+                    (board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() + 1).has('.black-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() + 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() + 2).has('.black-pawn').length &&
+                    pawn.parent().index() + 2 < pawn.parent().parent().children().length))
             {
-                var enemy = board.find('.row').eq(pawn.parent().parent().index() - 1)
-                        .find('.square').eq(Math.ceil((pawn.parent().index() + target.index()) / 2))
-                        .find('.black-pawn');
+                return true;
             }
         }
         else if (pawn.hasClass('black-pawn'))
         {
-            if (board.find('.row').eq(pawn.parent().parent().index() + 1)
-                            .find('.square').eq((pawn.parent().index() + target.index()) / 2)
-                            .find('.white-pawn').length !== 0)
+            if ((board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() - 1).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() - 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() - 2).has('.black-pawn').length &&
+                    pawn.parent().index() - 2 > 0) ||
+
+                    (board.find('.row').eq(pawn.parent().parent().index() - 1).find('.square').eq(pawn.parent().index() + 1).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() + 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() - 2).find('.square').eq(pawn.parent().index() + 2).has('.black-pawn').length &&
+                    pawn.parent().index() + 2 < pawn.parent().parent().children().length) ||
+
+                    (board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() - 1).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() - 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() - 2).has('.black-pawn').length &&
+                    pawn.parent().index() - 2 > 0) ||
+
+                    (board.find('.row').eq(pawn.parent().parent().index() + 1).find('.square').eq(pawn.parent().index() + 1).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() + 2).has('.white-pawn').length &&
+                    !board.find('.row').eq(pawn.parent().parent().index() + 2).find('.square').eq(pawn.parent().index() + 2).has('.black-pawn').length &&
+                    pawn.parent().index() + 2 < pawn.parent().parent().children().length))
             {
-                board.find('.row').eq(pawn.parent().parent().index() + 1)
-                        .find('.square').eq(Math.ceil((pawn.parent().index() + target.index()) / 2))
-                        .find('.white-pawn');
+                return true;
             }
         }
 
-        return enemy;
+        return false;
     }
 
     $('.pawn').click(function()
@@ -70,10 +97,20 @@ $(function ()
     {
         if (pawnSelected && $(this).find('.pawn').length === 0 && $(this).css('background-color') !== 'rgba(0, 0, 0, 0)')
         {
+            var haveToAttack = false;
             if (pawn.hasClass('white-pawn'))
             {
-                if (board.find($(this).parent()).index() >= board.find(pawn.parent().parent()).index() ||
-                board.find($(this).parent()).index() < board.find(pawn.parent().parent()).index() - 2 ||
+                $('.white-pawn').each(function(){
+                    if (possibilityOfAttack($(this)))
+                    {
+                        console.log($(this));
+                        haveToAttack = true;
+                    }
+                });
+
+
+                /*if ($(this).parent().index() >= pawn.parent().parent().index() ||
+                $(this).parent().index() < pawn.parent().parent().index() - 2 ||
                 Math.abs(board.find($(this)).index() - board.find(pawn.parent()).index()) !==
                 Math.abs(board.find($(this).parent()).index() - board.find(pawn.parent().parent()).index()))
                 {
@@ -87,11 +124,20 @@ $(function ()
                 if(Math.abs($(this).index() - pawn.parent().index()) === 2 && !findEnemy($(this)))
                 {
                     return;
-                }
+                }*/
             }
             else if (pawn.hasClass('black-pawn'))
             {
-                if (board.find($(this).parent()).index() <= board.find(pawn.parent().parent()).index() ||
+                $('.black-pawn').each(function(){
+                    if (possibilityOfAttack($(this)))
+                    {
+                        console.log($(this));
+                        haveToAttack = true;
+                    }
+                });
+
+
+                /*if (board.find($(this).parent()).index() <= board.find(pawn.parent().parent()).index() ||
                         board.find($(this).parent()).index() > board.find(pawn.parent().parent()).index() + 2 ||
                         Math.abs(board.find($(this)).index() - board.find(pawn.parent()).index()) !==
                         Math.abs(board.find($(this).parent()).index() - board.find(pawn.parent().parent()).index()))
@@ -101,7 +147,7 @@ $(function ()
                 if(Math.abs($(this).index() - pawn.parent().index()) === 2 && !findEnemy($(this)))
                 {
                     return;
-                }
+                }*/
             }
 
             pawn.appendTo($(this));
