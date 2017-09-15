@@ -12,6 +12,8 @@ $(function ()
     var pawn;
     var haveToAttack = false;
     var queenFont = '<i class="fa fa-life-ring" aria-hidden="true"></i>';
+    var blackPawn = '<div class="black-pawn pawn"><div></div></div>';
+    var whitePawn = '<div class="white-pawn pawn"><div></div></div>';
 
     function possibilityOfAttack(pawn)
     {
@@ -93,7 +95,7 @@ $(function ()
                         break;
                     }
                     if (board.children().eq(x).children().eq(y).find('.black-pawn').length && x + 1 < board.children().length &&
-                            y - 1 < pawn.parent().parent().children().length)
+                            y - 1 >= 0)
                     {
                         if (board.children().eq(x + 1).children().eq(y - 1).children().length)
                         {
@@ -292,6 +294,11 @@ $(function ()
                 ++whiteScore;
                 whiteScoreElement.html('White: ' + whiteScore);
 
+                if (whiteScore === 12){
+                    setTimeout(resetGame('white'), 500);
+                    return;
+                }
+
                 return true;
             }
         }
@@ -311,6 +318,11 @@ $(function ()
                 ++blackScore;
                 blackScoreElement.html('Black: ' + blackScore);
 
+                if (blackScore === 12){
+                    setTimeout(resetGame('black'), 500);
+                    return;
+                }
+
                 return true;
             }
         }
@@ -325,15 +337,19 @@ $(function ()
             {
                 pawn.find('div').append(queenFont);
                 pawn.addClass('queen');
+                return true;
             }
+            return false;
         }
         else if (pawn.hasClass('black-pawn')) {
             if (pawn.parent().parent().index() === board.children().length - 1)
             {
                 pawn.find('div').append(queenFont);
                 pawn.addClass('queen');
+                return true;
             }
         }
+        return false;
     }
 
     function checkQueensMove(target)
@@ -403,16 +419,15 @@ $(function ()
             --x;
             --y;
             while (x >= 0 && y >= 0) {
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')){
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     --x;
                     --y;
                     while (x >= 0 && y >= 0){
-                        if (board.children().eq(x).children().eq(y).hasClass('white-pawn') || board.children().eq(x).children().eq(y).hasClass('black-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         --x;
                         --y;
                     }
@@ -426,18 +441,16 @@ $(function ()
             y = pawn.parent().index();
             --x;
             ++y;
-            while (x >= 0 && y < $('.row').children().length) {
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')){
+            while (x >= 0 && y < target.parent().children().length) {
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     --x;
                     ++y;
-                    while (x >= 0 && y < $('.row').length){
-
-                        if (board.children().eq(x).children().eq(y).hasClass('white-pawn') || board.children().eq(x).children().eq(y).hasClass('black-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                    while (x >= 0 && y < target.parent().children().length){
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         --x;
                         ++y;
                     }
@@ -451,18 +464,16 @@ $(function ()
             y = pawn.parent().index();
             ++x;
             ++y;
-            while (x < board.children().length && y < $('.row').children().length) {
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')){
+            while (x < board.children().length && y < target.parent().children().length) {
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     ++x;
                     ++y;
-                    while (x < board.children().length && y < $('.row').length){
-
-                        if (board.children().eq(x).children().eq(y).hasClass('white-pawn') || board.children().eq(x).children().eq(y).hasClass('black-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                    while (x < board.children().length && y < target.parent().children().length){
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         ++x;
                         ++y;
                     }
@@ -476,16 +487,15 @@ $(function ()
             ++x;
             --y;
             while (x < board.children().length && y >= 0) {
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')){
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     ++x;
                     --y;
                     while (x < board.children().length && y >= 0){
-                        if (board.children().eq(x).children().eq(y).hasClass('white-pawn') || board.children().eq(x).children().eq(y).hasClass('black-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         ++x;
                         --y;
                     }
@@ -501,16 +511,15 @@ $(function ()
             --x;
             --y;
             while (x >= 0 && y >= 0) {
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')){
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     --x;
                     --y;
                     while (x >= 0 && y >= 0){
-                        if (board.children().eq(x).children().eq(y).hasClass('black-pawn') || board.children().eq(x).children().eq(y).hasClass('white-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         --x;
                         --y;
                     }
@@ -524,17 +533,16 @@ $(function ()
             y = pawn.parent().index();
             --x;
             ++y;
-            while (x >= 0 && y < $('.row').children().length) {
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')){
+            while (x >= 0 && y < target.parent().children().length) {
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     --x;
                     ++y;
-                    while (x >= 0 && y < $('.row').length){
-                        if (board.children().eq(x).children().eq(y).hasClass('black-pawn') || board.children().eq(x).children().eq(y).hasClass('white-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                    while (x >= 0 && y < target.parent().children().length){
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         --x;
                         ++y;
                     }
@@ -548,17 +556,16 @@ $(function ()
             y = pawn.parent().index();
             ++x;
             ++y;
-            while (x < board.children().length && y < $('.row').children().length) {
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')){
+            while (x < board.children().length && y < target.parent().children().length) {
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     ++x;
                     ++y;
-                    while (x < board.children().length && y < $('.row').length){
-                        if (board.children().eq(x).children().eq(y).hasClass('black-pawn') || board.children().eq(x).children().eq(y).hasClass('white-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                    while (x < board.children().length && y < target.parent().children().length){
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         ++x;
                         ++y;
                     }
@@ -573,16 +580,15 @@ $(function ()
             ++x;
             --y;
             while (x < board.children().length && y >= 0) {
-                if (board.children().eq(x).children().eq(y).hasClass('black-pawn')) break;
-                if (board.children().eq(x).children().eq(y).hasClass('white-pawn')){
+                if (board.children().eq(x).children().eq(y).find('.black-pawn').length) break;
+                if (board.children().eq(x).children().eq(y).find('.white-pawn').length){
                     enemy.x = x;
                     enemy.y = y;
                     ++x;
                     --y;
                     while (x < board.children().length && y >= 0){
-                        if (board.children().eq(x).children().eq(y).hasClass('black-pawn') || board.children().eq(x).children().eq(y).hasClass('white-pawn')){
-                            break;
-                        }else if (target.parent().index() === x && target.index() === y)  return enemy;
+                        if (board.children().eq(x).children().eq(y).find('.pawn').length)   break;
+                        else if (target.parent().index() === x && target.index() === y)     return enemy;
                         ++x;
                         --y;
                     }
@@ -594,27 +600,68 @@ $(function ()
         }
     }
 
-    $('.pawn').click(function()
-    {
-        if (whoseTurn === 'white' && $(this).hasClass('white-pawn'))
-        {
-            pawn = $(this);
-            pawnSelected = true;
-            $('.pawn').removeClass('selected');
-            pawn.addClass('selected');
+    function resetGame(color){
+        if (color === 'white'){
+            window.alert('White win!');
+        }else if (color === 'black'){
+            window.alert('Black win!');
         }
-        else if (whoseTurn === 'black' && $(this).hasClass('black-pawn'))
-        {
-            pawn = $(this);
-            pawnSelected = true;
-            $('.pawn').removeClass('selected');
-            pawn.addClass('selected');
+        whiteScore = 0;
+        blackScore = 0;
+        whiteScoreElement.html('White: ' + whiteScore);
+        blackScoreElement.html('Black: ' + blackScore);
+        $('.pawn').remove();
+        pawnSelected = false;
+        whoseTurn = 'white';
+        haveToAttack = false;
+        for (var i = 0; i < 3; ++i) {
+            var squares = $('.row').eq(i).find('.square');
+            for (var j = 0; j < squares.length; ++j){
+                if (squares.eq(j).css('background-color') === 'rgb(156, 156, 156)'){
+                    squares.eq(j).append(blackPawn);
+                }
+            }
         }
-    });
+        for (i = 5; i < board.children().length; ++i) {
+            squares = $('.row').eq(i).find('.square');
+            for (j = 0; j < squares.length; ++j){
+                if (squares.eq(j).css('background-color') === 'rgb(156, 156, 156)'){
+                    squares.eq(j).append(whitePawn);
+                }
+            }
+        }
 
-    $('.square').click(function()
-    {
-        if (pawnSelected && $(this).find('.pawn').length === 0 && $(this).css('background-color') !== 'rgba(0, 0, 0, 0)')
+        $('.pawn').click(function()
+        {
+            selectPawn($(this));
+        });
+
+        $('.square').click(function()
+        {
+            selectSquare($(this));
+        });
+    }
+
+
+    function selectPawn(selectedPawn){
+        if (whoseTurn === 'white' && selectedPawn.hasClass('white-pawn'))
+        {
+            pawn = selectedPawn;
+            pawnSelected = true;
+            $('.pawn').removeClass('selected');
+            pawn.addClass('selected');
+        }
+        else if (whoseTurn === 'black' && selectedPawn.hasClass('black-pawn'))
+        {
+            pawn = selectedPawn;
+            pawnSelected = true;
+            $('.pawn').removeClass('selected');
+            pawn.addClass('selected');
+        }
+    }
+
+    function selectSquare(selectedSquare){
+        if (pawnSelected && selectedSquare.find('.pawn').length === 0 && selectedSquare.css('background-color') !== 'rgba(0, 0, 0, 0)')
         {
             haveToAttack = false;
             if (pawn.hasClass('white-pawn'))
@@ -628,9 +675,9 @@ $(function ()
 
                 if (!haveToAttack){
                     if (pawn.hasClass('queen')){
-                        if (checkQueensMove($(this)))
+                        if (checkQueensMove(selectedSquare))
                         {
-                            pawn.appendTo($(this));
+                            pawn.appendTo(selectedSquare);
                             pawnSelected = false;
                             if (pawn.hasClass('white-pawn'))
                             {
@@ -651,15 +698,27 @@ $(function ()
                     }
                     else
                     {
-                       if($(this).parent().index() !== pawn.parent().parent().index() - 1 ||
-                                Math.abs($(this).index() - pawn.parent().index()) > 1) {
-                                return;
-                       }
+                        if(selectedSquare.parent().index() !== pawn.parent().parent().index() - 1 ||
+                                Math.abs(selectedSquare.index() - pawn.parent().index()) > 1) {
+                            return;
+                        }
 
-                        pawn.appendTo($(this));
+                        pawn.appendTo(selectedSquare);
                         if (!pawn.hasClass('queen'))
                         {
-                            queenMaker(pawn);
+                            if (queenMaker(pawn)){
+                                pawnSelected = false;
+                                if (pawn.hasClass('white-pawn'))
+                                {
+                                    whoseTurn = 'black';
+                                }
+                                else if (pawn.hasClass('black-pawn'))
+                                {
+                                    whoseTurn = 'white';
+                                }
+                                pawn.removeClass('selected');
+                                return;
+                            }
                         }
                         pawnSelected = false;
                         if (pawn.hasClass('white-pawn'))
@@ -677,15 +736,22 @@ $(function ()
                 }
                 else {
                     if (pawn.hasClass('queen')) {
-                        if (correctQueenAttack($(this)) === null) {
+                        var enemy = correctQueenAttack(selectedSquare);
+                        if (enemy === undefined) {
                             return;
                         } else {
-                            board.children().eq(correctQueenAttack($(this)).x).children().eq(correctQueenAttack($(this)).y).find('.pawn').remove();
+                            board.children().eq(enemy.x).children().eq(enemy.y).find('.pawn').remove();
+                            ++whiteScore;
+                            whiteScoreElement.html('White: ' + whiteScore);
+                            if (whiteScore === 12){
+                                setTimeout(resetGame('white'), 500);
+                                return;
+                            }
                         }
                     }
                     else {
-                        if (Math.abs($(this).parent().index() - pawn.parent().parent().index()) !== 1 &&
-                                Math.abs($(this).parent().index() - pawn.parent().parent().index()) !== 2 || !findEnemy($(this))){
+                        if (Math.abs(selectedSquare.parent().index() - pawn.parent().parent().index()) !== 1 &&
+                                Math.abs(selectedSquare.parent().index() - pawn.parent().parent().index()) !== 2 || !findEnemy(selectedSquare)){
                             return;
                         }
                     }
@@ -702,9 +768,9 @@ $(function ()
 
                 if (!haveToAttack){
                     if (pawn.hasClass('queen')){
-                        if (checkQueensMove($(this)))
+                        if (checkQueensMove(selectedSquare))
                         {
-                            pawn.appendTo($(this));
+                            pawn.appendTo(selectedSquare);
                             pawnSelected = false;
                             if (pawn.hasClass('white-pawn'))
                             {
@@ -723,12 +789,24 @@ $(function ()
                             return;
                         }
                     }else {
-                        if ($(this).parent().index() !== pawn.parent().parent().index() + 1 ||
-                                Math.abs($(this).index() - pawn.parent().index()) > 1) {
+                        if (selectedSquare.parent().index() !== pawn.parent().parent().index() + 1 ||
+                                Math.abs(selectedSquare.index() - pawn.parent().index()) > 1) {
                             return;
                         }
-                        pawn.appendTo($(this));
-                        queenMaker(pawn);
+                        pawn.appendTo(selectedSquare);
+                        if (queenMaker(pawn)){
+                            pawnSelected = false;
+                            if (pawn.hasClass('white-pawn'))
+                            {
+                                whoseTurn = 'black';
+                            }
+                            else if (pawn.hasClass('black-pawn'))
+                            {
+                                whoseTurn = 'white';
+                            }
+                            pawn.removeClass('selected');
+                            return;
+                        }
                         pawnSelected = false;
                         if (pawn.hasClass('white-pawn')) {
                             whoseTurn = 'black';
@@ -743,25 +821,44 @@ $(function ()
                 }
                 else {
                     if (pawn.hasClass('queen')) {
-                        if (correctQueenAttack($(this)) === null) {
+                        enemy = correctQueenAttack(selectedSquare);
+                        if (enemy === undefined) {
                             return;
                         } else {
-                            board.children().eq(correctQueenAttack($(this)).x).children().eq(correctQueenAttack($(this)).y).find('.pawn').remove();
+                            board.children().eq(enemy.x).children().eq(enemy.y).find('.pawn').remove();
+                            ++blackScore;
+                            blackScoreElement.html('Black: ' + blackScore);
+                            if (blackScore === 12){
+                                setTimeout(resetGame('black'), 500);
+                                return;
+                            }
                         }
                     } else {
-                        if (Math.abs($(this).parent().index() - pawn.parent().parent().index()) !== 1 &&
-                                Math.abs($(this).parent().index() - pawn.parent().parent().index()) !== 2 || !findEnemy($(this))) {
+                        if (Math.abs(selectedSquare.parent().index() - pawn.parent().parent().index()) !== 1 &&
+                                Math.abs(selectedSquare.parent().index() - pawn.parent().parent().index()) !== 2 || !findEnemy(selectedSquare)) {
                             return;
                         }
                     }
                 }
             }
 
-            pawn.appendTo($(this));
-            queenMaker(pawn);
+            pawn.appendTo(selectedSquare);
+            if (queenMaker(pawn)){
+                pawnSelected = false;
+                if (pawn.hasClass('white-pawn'))
+                {
+                    whoseTurn = 'black';
+                }
+                else if (pawn.hasClass('black-pawn'))
+                {
+                    whoseTurn = 'white';
+                }
+                pawn.removeClass('selected');
+                return;
+            }
             if (possibilityOfAttack(pawn))
             {
-                pawn = $(this).find('.pawn');
+                pawn = selectedSquare.find('.pawn');
                 return;
             }
 
@@ -776,5 +873,20 @@ $(function ()
             }
             pawn.removeClass('selected');
         }
+    }
+
+    $('.pawn').click(function()
+    {
+        selectPawn($(this));
+    });
+
+    $('.square').click(function()
+    {
+        selectSquare($(this));
+    });
+
+    $('button').click(function()
+    {
+        resetGame('reset');
     });
 });
